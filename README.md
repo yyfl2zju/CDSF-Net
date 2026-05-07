@@ -39,11 +39,8 @@ images/
 ├── 唐代/
 ├── 五代/
 ├── 宋/
-├── 西夏/
 └── 元/
 ```
-
-`西夏` is excluded by default to match the 10-class setting described in the current README and experiments.
 
 Optional pseudo-labeled data can be placed under:
 
