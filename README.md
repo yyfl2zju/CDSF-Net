@@ -1,87 +1,88 @@
-# CDSF-Net: Fine-Grained Dating of Ancient Murals
+<div align="center">
 
-Official implementation for **“Fine-Grained Dating of Ancient Murals with Degradation Adaptation and Forgetting-Aware Long-Tail Learning”**. The project focuses on **automatic dynasty/period classification for ancient mural images** under three practical challenges: **subtle inter-period style differences**, **spatially non-uniform degradation**, and **long-tailed data distribution**.  
+# CDSF-Net
+
+Core implementation of **CDSF-Net** for fine-grained dating of ancient murals.
+
+ConvNeXt-Base backbone with `CSFR`, `DASF`, and `FCB`, organized into a clean standalone package for public release.
+
+</div>
 
 ## Overview
 
-Ancient mural dating is an important problem in digital cultural heritage analysis. Traditional dating methods rely heavily on expert knowledge and are often subjective, time-consuming, and labor-intensive. This work formulates mural dating as a **fine-grained image classification task** and proposes **CDSF-Net**, a unified framework designed for degraded and imbalanced mural datasets.  
+This folder was extracted from the larger experiment workspace and keeps only the code needed for the main method.
 
-CDSF-Net is built to address three domain-specific difficulties:
+- `CSFR`: Cross-Scale Feature Refinement for preserving subtle stylistic cues across feature levels
+- `DASF`: Degradation-Adaptive Semantic Fusion for balancing local texture and global semantics
+- `FCB`: forgetting-aware class balancing for long-tailed training
+- two-stage training with optional pseudo labels
 
-* **Fine-grained stylistic differences** between adjacent historical periods
-* **Non-uniform mural degradation**, such as fading, blur, and peeling
-* **Long-tailed class imbalance** caused by uneven mural survivorship across dynasties 
+## Architecture
 
-## Main Contributions
+<p align="center">
+  <img src="fig/fig1_overall.png" alt="CDSF-Net overall architecture" width="100%">
+</p>
 
-* Proposes **CDSF-Net**, a mural dating framework that jointly models fine-grained discrimination, degradation robustness, and long-tail learning. 
-* Builds **Mural5376**, a dataset of **5,376 mural images** spanning **10 Chinese historical periods**.  
-* Introduces:
 
-  * **CSFR**: Cross-Scale Feature Refinement
-  * **DASF**: Degradation-Adaptive Semantic Fusion
-  * **FCB**: Forgetting-aware Class-Balancing 
+## Dataset Layout
 
-## Method
+The training script expects image folders like:
 
-The model uses a **ConvNeXt-Base** hierarchical backbone and consists of three key modules: 
+```text
+images/
+├── 两晋十六国/
+├── 北魏/
+├── 西魏/
+├── 北齐/
+├── 北周/
+├── 隋/
+├── 唐代/
+├── 五代/
+├── 宋/
+├── 西夏/
+└── 元/
+```
 
-### 1. CSFR: Cross-Scale Feature Refinement
+`西夏` is excluded by default to match the 10-class setting described in the current README and experiments.
 
-CSFR refines higher-level features with low-level details so that subtle stylistic cues, such as contours, brushwork, and clothing patterns, are better preserved for dynasty discrimination. 
+Optional pseudo-labeled data can be placed under:
 
-### 2. DASF: Degradation-Adaptive Semantic Fusion
+```text
+images_pseudo/<class_name>/*.jpg
+```
 
-DASF adaptively fuses **local texture information** and **global semantic/style information** according to preservation quality. In well-preserved regions, local details receive more attention; in severely degraded regions, the model relies more on global context. 
+## Quick Start
 
-### 3. FCB: Forgetting-aware Class-Balancing
+```bash
+pip install -r requirements.txt
+```
 
-FCB dynamically reweights training samples based on class imbalance and forgetting events, helping the model focus on underrepresented classes and hard boundary samples. 
+Train with:
 
-The framework diagram on **page 8** visually summarizes how these three modules correspond to the three domain challenges. 
+```bash
+python train.py \
+  --data_dir images \
+  --pseudo_root images_pseudo \
+  --use_pseudo \
+  --output_dir runs/cdsf_net
+```
 
-## Dataset
+The script will automatically create a fixed split file under `splits/` if it does not already exist.
 
-**Mural5376** contains **5,376 images** from the following 10 periods:
-Jin-16 Kingdoms, Northern Wei, Western Wei, Northern Qi, Northern Zhou, Sui, Tang, Five Dynasties, Song, and Yuan. 
+## What Is Included
 
-The sample distribution is highly imbalanced. For example, the paper notes that the **Tang** class contains far more samples than minority classes such as **Northern Qi**, which motivates the long-tail learning strategy. 
+- Main training entry: `train.py`
+- Model definition: `models/cdsf_net.py`
+- Dataset split and sampling utilities: `utils/data.py`
+- Forgetting-aware balancing: `utils/losses.py`
+- Evaluation metrics: `utils/metrics.py`
 
-The dataset construction pipeline includes:
+## Notes
 
-* document layout parsing,
-* image-text matching,
-* dynasty label extraction,
-* deduplication,
-* and quality control. 
-
-## Results
-
-On Mural5376, CDSF-Net achieves:
-
-* **Top-1 Accuracy:** 88.97%
-* **Top-3 Accuracy:** 98.39%
-* **Macro-F1:** 0.8899 
-
-Compared with the ConvNeXt-Base baseline, CDSF-Net improves **Top-1 accuracy by 3.34 percentage points**. 
-
-The paper also shows that CDSF-Net is more robust under simulated degradation, including:
-
-* blur,
-* fading,
-* peeling,
-* and composite degradation scenarios. 
-
-## Highlights
-
-* Strong performance on **fine-grained dynasty classification**
-* Better robustness under **severe mural degradation**
-* Improved recognition of **minority and hard classes**
-* A practical framework for **digital cultural heritage analysis** beyond murals, with possible transfer to paintings, textiles, and related artifacts  
+- This package intentionally excludes raw data, checkpoints, training logs, and external backbone repositories.
+- The public-facing code uses the paper terminology `CSFR / DASF / FCB` instead of the older internal experiment names.
 
 ## Citation
-
-If you use this work, please cite the paper:
 
 ```bibtex
 @article{wang2026cdsfnet,
@@ -89,4 +90,3 @@ If you use this work, please cite the paper:
   author={Jin Wang and Zheng Liu and Juan Wang and Xuelong Li and Yu Weng}
 }
 ```
-
