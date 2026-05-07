@@ -10,8 +10,6 @@ ConvNeXt-Base backbone with `CSFR`, `DASF`, and `FCB`, organized into a clean st
 
 ## Overview
 
-This folder was extracted from the larger experiment workspace and keeps only the code needed for the main method.
-
 - `CSFR`: Cross-Scale Feature Refinement for preserving subtle stylistic cues across feature levels
 - `DASF`: Degradation-Adaptive Semantic Fusion for balancing local texture and global semantics
 - `FCB`: forgetting-aware class balancing for long-tailed training
@@ -63,8 +61,6 @@ python train.py \
   --use_pseudo \
   --output_dir runs/cdsf_net
 ```
-
-The script will automatically create a fixed split file under `splits/` if it does not already exist.
 
 
 ## Citation
