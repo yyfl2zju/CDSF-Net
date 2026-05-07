@@ -66,18 +66,6 @@ python train.py \
 
 The script will automatically create a fixed split file under `splits/` if it does not already exist.
 
-## What Is Included
-
-- Main training entry: `train.py`
-- Model definition: `models/cdsf_net.py`
-- Dataset split and sampling utilities: `utils/data.py`
-- Forgetting-aware balancing: `utils/losses.py`
-- Evaluation metrics: `utils/metrics.py`
-
-## Notes
-
-- This package intentionally excludes raw data, checkpoints, training logs, and external backbone repositories.
-- The public-facing code uses the paper terminology `CSFR / DASF / FCB` instead of the older internal experiment names.
 
 ## Citation
 
