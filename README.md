@@ -13,7 +13,6 @@ ConvNeXt-Base backbone with `CSFR`, `DASF`, and `FCB`, organized into a clean st
 - `CSFR`: Cross-Scale Feature Refinement for preserving subtle stylistic cues across feature levels
 - `DASF`: Degradation-Adaptive Semantic Fusion for balancing local texture and global semantics
 - `FCB`: forgetting-aware class balancing for long-tailed training
-- two-stage training with optional pseudo labels
 
 ## Architecture
 
@@ -38,28 +37,6 @@ images/
 ├── 五代/
 ├── 宋/
 └── 元/
-```
-
-Optional pseudo-labeled data can be placed under:
-
-```text
-images_pseudo/<class_name>/*.jpg
-```
-
-## Quick Start
-
-```bash
-pip install -r requirements.txt
-```
-
-Train with:
-
-```bash
-python train.py \
-  --data_dir images \
-  --pseudo_root images_pseudo \
-  --use_pseudo \
-  --output_dir runs/cdsf_net
 ```
 
 
