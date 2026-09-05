@@ -21,25 +21,6 @@ ConvNeXt-Base backbone with `CSFR`, `DASF`, and `FCB`, organized into a clean st
 </p>
 
 
-## Dataset Layout
-
-The training script expects image folders like:
-
-```text
-images/
-├── 两晋十六国/
-├── 北魏/
-├── 西魏/
-├── 北齐/
-├── 北周/
-├── 隋/
-├── 唐代/
-├── 五代/
-├── 宋/
-└── 元/
-```
-
-
 ## Citation
 
 ```bibtex
